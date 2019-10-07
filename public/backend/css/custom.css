@@ -1,0 +1,16 @@
+.search-table-form{
+    display:none;
+}
+
+.kt-switch.kt-switch--outline.kt-switch--success input:empty ~ span:after {
+    background-color: red !important;
+}
+.kt-switch.kt-switch--outline.kt-switch--success input:checked ~ span:after {
+    background-color: #0abb87 !important;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: red !important;
+    border-color: red !important;
+}
