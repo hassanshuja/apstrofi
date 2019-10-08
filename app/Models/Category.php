@@ -13,6 +13,7 @@ class Category extends Model {
 
     protected $fillable = ['slug','name','name_l','parent_id','description','description_l','image_url','status','order','old_id'];
 
+    // protected $hidden = ['id'];
 
     public function getStatusValAttribute(){
         if($this->attributes['status']){

@@ -1,6 +1,0 @@
-Parsing file:///var/www/html/apstrofi/clientback/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/ShellExec.php
-Parsing file:///var/www/html/apstrofi/clientback/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/PostInc.php
-Parsing file:///var/www/html/apstrofi/clientback/vendor/nikic/php-parser/lib/PhpParser/Node/Expr/PostDec.php
-DEBUG     Restarted process exited 0
-
-Language server exited with exit code 0

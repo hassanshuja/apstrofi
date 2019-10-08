@@ -20,17 +20,36 @@ class CatalogueController extends Controller
 {
     public function index(Request $request)
     {
+
+       
         $colors = isset($request->colors) ? json_decode($request->colors) : null;
 		$size = isset($request->size) ? json_decode($request->size) : null;
-        $query = Product::query()->select('id', 'name','brand_id', 'name_l', 'sizing_gender','sizing_type','category_id', 'price');
+		$subcategory_id = isset($request->subcategory_id) ? json_decode($request->subcategory_id) : null;
+        $sizing_gender = isset($request->sizing_gender) ? $request->sizing_gender : null;
+        // dd($sizing_gender,$request->sizing_gender,isset($request->sizing_gender));
+        $category_id = $request->route('id');
+        // dd($category_id);
+        $query = Product::query()
+                ->select('products.id', 'products.name','products.brand_id', 'products.name_l', 
+                        'products.sizing_gender','products.sizing_type','products.category_id', 
+                        'price')
+                ->leftJoin('categories', 'categories.id', '=','products.category_id' )
+                ->where('categories.parent_id', $category_id);
+        if($subcategory_id){
+            $query->where('products.category_id', $subcategory_id);
+        }
         if($colors) {
-        	$query->whereIn('attribute_value_color_id', $colors);
+        	$query->whereIn('products.attribute_value_color_id', $colors);
         }
         if($size) {
-            $query->whereIn('attribute_value_size_id', $size);
+            $query->whereIn('products.attribute_value_size_id', $size);
         }
-        $query->where('status', 1);
-        $result = $query->latest('created_at')->with('product_images', 'product_brand', 'product_categories')->paginate(12);
+        $query->where('products.sizing_gender', $sizing_gender);
+        $query->where('products.status', 1);
+        // $query->with(['product_categories' => function($q, $category_id){
+        //     $q->where('parent_id', $category_id);
+        // }]);
+        $result = $query->latest('products.created_at')->with(['product_images', 'product_brand' ])->paginate(12);
         return $result;
     }
 

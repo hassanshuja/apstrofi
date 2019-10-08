@@ -10,6 +10,9 @@ Route::post('/logout', 'Auth\AuthController@logout');
 Route::resource('categories', 'Front\Categories\CategoryController');
 
 Route::get('men/category',['as'=>'men.category','uses'=>'Front\Categories\CategoryController@menCategory']);
+Route::get('men/subcategory/{parent_id}',['as'=>'men.category','uses'=>'Front\Categories\CategoryController@menSubCategory']);
+Route::get('men/getsubcatItem/{parent_id}',['as'=>'men.category','uses'=>'Front\Categories\CategoryController@menSubCategoryItem']);
+
 Route::get('women/category',['as'=>'women.category','uses'=>'Front\Categories\CategoryController@womenCategory']);
 Route::get('page/women',['as'=>'page.women','uses'=>'Front\Page\PageController@women']);
 Route::get('page/men',['as'=>'page.men','uses'=>'Front\Page\PageController@men']);
@@ -27,7 +30,7 @@ Route::post('subscription',['as'=>'subscription','uses'=>'Front\Misc\Subscriptio
 Route::post('merchantDetails',['as'=>'merchantDetails','uses'=>'Front\Merchant\MerchantController@merchantDetails']);
 
 // Route::resource('subscription', '');
-Route::get('page/catalogue',['as'=>'page.catalogue','uses'=>'Front\Catalogue\CatalogueController@index']);
+Route::get('page/catalogue/{id}',['as'=>'page.catalogue','uses'=>'Front\Catalogue\CatalogueController@index']);
 
 /* MEN ROUTES*/
 Route::get('men/allproducts',['as'=>'men.allproducts','uses'=>'Front\Men\MenController@getAllProducts']);
