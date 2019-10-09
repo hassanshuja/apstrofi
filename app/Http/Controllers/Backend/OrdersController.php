@@ -146,4 +146,13 @@ class OrdersController extends Controller
 
        return response()->json($orderId);
     }
+
+    public function kredivoPushUri(Request $request){
+           $new =  array("status" => "OK",
+            "message" => "Received api request from kredivo for apstrofi",
+            "redirect_url" => "https://sandbox.kredivo.com/kredivo/v2/signin?tk=XXX"
+            );
+
+        return \response()->json($new);
+    }
 }
