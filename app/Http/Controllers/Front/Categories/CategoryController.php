@@ -60,11 +60,26 @@ class CategoryController extends Controller
     // }
     
     public function womenCategory(){
+        
+        $abc = Category::whereNotNull('parent_id')
+                    ->with('parent', 'shops')->where('status',1)
+                    ->whereHas('shops',function ($q){
+                                $q->where('code','women');
+                    })->ordered()->get();
 
         return CategoryListResource::collection(
-            Category::whereNull('parent_id')->where('status',1)->whereHas('shops',function ($q){
+            $abc->unique('parent')
+        );
+
+    }
+
+    public function womenSubCategory($id){
+        
+        return CategoryListResource::collection(
+            Category::whereNotNull('parent_id')->with('parent', 'shops')->where('status',1)->whereHas('shops',function ($q){
                 $q->where('code','women');
-            })->ordered()->get()
+            })->where('parent_id', $id)
+            ->ordered()->get()
         );
     }
 }

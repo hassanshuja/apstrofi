@@ -26,6 +26,7 @@ class CatalogueController extends Controller
 		$size = isset($request->size) ? json_decode($request->size) : null;
 		$subcategory_id = isset($request->subcategory_id) ? json_decode($request->subcategory_id) : null;
         $sizing_gender = isset($request->sizing_gender) ? $request->sizing_gender : null;
+        $sortby = isset($request->sortby) ? $request->sortby : null;
         // dd($sizing_gender,$request->sizing_gender,isset($request->sizing_gender));
         $category_id = $request->route('id');
         // dd($category_id);
@@ -49,7 +50,14 @@ class CatalogueController extends Controller
         // $query->with(['product_categories' => function($q, $category_id){
         //     $q->where('parent_id', $category_id);
         // }]);
-        $result = $query->latest('products.created_at')->with(['product_images', 'product_brand' ])->paginate(12);
+        if($sortby){
+            if($sortby == 'asc' || $sortby == 'desc'){
+                $query->orderBy('price', $sortby);
+            }else{
+                $query->latest('products.created_at');
+            }
+        }
+        $result = $query->with(['product_images', 'product_brand' ])->paginate(12);
         return $result;
     }
 

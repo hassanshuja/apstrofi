@@ -11,9 +11,11 @@ Route::resource('categories', 'Front\Categories\CategoryController');
 
 Route::get('men/category',['as'=>'men.category','uses'=>'Front\Categories\CategoryController@menCategory']);
 Route::get('men/subcategory/{parent_id}',['as'=>'men.category','uses'=>'Front\Categories\CategoryController@menSubCategory']);
-Route::get('men/getsubcatItem/{parent_id}',['as'=>'men.category','uses'=>'Front\Categories\CategoryController@menSubCategoryItem']);
 
 Route::get('women/category',['as'=>'women.category','uses'=>'Front\Categories\CategoryController@womenCategory']);
+Route::get('women/subcategory/{parent_id}',['as'=>'women.category','uses'=>'Front\Categories\CategoryController@womenSubCategory']);
+
+
 Route::get('page/women',['as'=>'page.women','uses'=>'Front\Page\PageController@women']);
 Route::get('page/men',['as'=>'page.men','uses'=>'Front\Page\PageController@men']);
 Route::get('page/home',['as'=>'page.home','uses'=>'Front\Page\PageController@home']);
