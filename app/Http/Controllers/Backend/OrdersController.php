@@ -207,11 +207,11 @@ class OrdersController extends Controller
 
         curl_close($curl);
 
-        if ($err) {
-        echo "cURL Error #:" . $err;
-        } else {
-        echo $response;
-        }
+        // if ($err) {
+        // echo "cURL Error #:" . $err;
+        // } else {
+        // echo $response;
+        // }
 
         $new =  array("status" => "OK",
         "message" => "Received api request from kredivo for apstrofi",
