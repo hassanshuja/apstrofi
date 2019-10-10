@@ -13,3 +13,4 @@ class Payment extends Model
                             'payment_type', 'message', 'json_obj', 'transaction_time', 
                             'transaction_id', 'signature_key'];
 }
+

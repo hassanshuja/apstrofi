@@ -189,6 +189,7 @@ class OrdersController extends Controller
 
         $curl = curl_init();
 
+        
         curl_setopt_array($curl, array(
         CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
