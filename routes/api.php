@@ -63,7 +63,7 @@ Route::post('/snaptokenization', 'Snap\SnapController@token');
 Route::post('/snapfinish', 'Snap\SnapController@finish');
 
 
-Route::post('orders/kredivo_notify', 'Backend\OrdersController@kredivoNotify');
+// Route::post('orders/kredivo_notify', 'Backend\OrdersController@kredivoNotify');
 Route::post('orders/kredivo_push_uri', 'Backend\OrdersController@kredivoPushUri');
 Route::get('orders/getorderid','Backend\OrdersController@getOrderId');
 Route::resource('orders', 'Backend\OrdersController');
