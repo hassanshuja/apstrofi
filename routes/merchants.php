@@ -16,4 +16,4 @@ $merchant->post('password/reset', 'ResetPasswordController@reset');
 
 
 
- Route::get('/home', 'HomeController@index')->name('home');
+//  Route::get('/home', 'HomeController@index')->name('home');
