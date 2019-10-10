@@ -20,7 +20,58 @@ class OrdersController extends Controller
     {
         //
         $orders = Orders::all();
-        return view('backend.orders.index');
+        return view('backend.orders.index',['page_title' => 'Orders Management','orders'=>$orders]);
+    }
+
+    public function listAjax(){
+
+        $request = request()->all();
+        // dd($request);
+        $data = [];
+        $return_data = [];
+        $query = new Orders();
+        $sortColumn = array('date','invoice_id','subtotal', 'shipping_discount', 'grandtotal', 'payment_status');
+        $sort_order = $request['order']['0']['dir'];
+        $order_field = $sortColumn[$request['order']['0']['column']];
+        if($order_field != ''){
+            if($sort_order == 'asc') {
+                $query = $query->orderBy($order_field, 'ASC');
+            }else{
+                $query = $query->orderBy($order_field, 'DESC');
+            }
+        }
+        foreach ($request['columns'] as $key=>$val){
+            if (trim($val['search']['value']) != '') {
+                $query = $query->where($val['data'],'like',"%" .$val['search']['value']. "%");
+            }
+        }
+        $iTotalRecords = $query->count();
+        $iDisplayLength = intval($request['length']);
+        $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+        $iDisplayStart = intval($request['start']);
+        $sEcho = intval($request['draw']);
+        $records = $query->skip($iDisplayStart)->take($iDisplayLength)->get();
+        foreach ($records as $key=>$val){
+            $index = 0;
+            $data[$key]['date'] = $val['date'];
+            $data[$key]['invoice_id'] = $val['invoice_id'];
+            $data[$key]['subtotal'] = $val['subtotal'];
+            $data[$key]['shipping_discount'] = $val['shipping_discount'];
+            $data[$key]['grandtotal'] = $val['grandtotal'];
+            $data[$key]['payment_status'] = $val['payment_status'];
+            $action = '<div class="actions"> <a data-toggle="confirmation"
+            data-placement="top" href="javascript:void(0);" data-title="update" data-id="'.$val['id'].'" class="update-order btn btn-danger btn-sm" data-modal="#kt_table_1" data-key="'.$key.'" data-action="'.route('admin.orders.update',$val['id']).'">Confirm</a></div>'; /**/
+            $action_paid = $val['payment_status'];
+            $data[$key]['action'] = $val['payment_status'] == 'Paid' ?  $action_paid : $action;
+            $return_data[$key] = $val;
+        }
+        $records["aaData"] = $data;
+        $records["record_data"] = $return_data;
+        $records["sEcho"] = $sEcho;
+        $records["iTotalDisplayRecords"] = $iTotalRecords;
+        $records["iTotalRecords"] = $iTotalRecords;
+
+        return response()->json($records);
     }
 
     /**
@@ -129,7 +180,9 @@ class OrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $orders = Orders::find($id);
+        $orders->payment_status = 'Paid';
+        $orders->save();
     }
 
     /**
@@ -156,7 +209,6 @@ class OrdersController extends Controller
         $order_id = $request->order_id;
         $order_payment = Orders::where('invoice_id', $order_id)->first();
         if($request->status == 'OK'){
-            
             $order_payment->payment_status = 1;
         }else{
             $order_payment->payment_status = 0;

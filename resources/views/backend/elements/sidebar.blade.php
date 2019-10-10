@@ -115,7 +115,7 @@
                     </a>
                 </li>
                 <li class="kt-menu__item " aria-haspopup="true">
-                    <a href="javascript:void(0)" class="kt-menu__link ">
+                    <a href="{!! route('admin.orders.index') !!}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cart"></i><span class="kt-menu__link-text">Orders</span>
                     </a>
                 </li>

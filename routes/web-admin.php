@@ -154,6 +154,11 @@ Route::group(['middleware'=>['admin.auth'],'as'=>'admin.'], function ($api) {
         'index'=>'discount.index'
     ]]);
 
+    $api->post('orders/list-ajax',['as'=>'orders.list-ajax','uses'=>'OrdersController@listAjax']);
+    $api->resource('orders', 'OrdersController',['names' => [
+        'index'=>'orders.index'
+    ]]);
+
     $api->post('discount-cart/select-category',['as'=>'discount-cart.select-product','uses'=>'DiscountCartController@selectProduct']);
     $api->post('discount-cart/list-ajax',['as'=>'discount-cart.list-ajax','uses'=>'DiscountCartController@listAjax']);
     $api->post('discount-cart/change-status',['as'=>'discount-cart.change-status','uses'=>'DiscountCartController@changeStatus']);
