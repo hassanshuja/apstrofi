@@ -19,6 +19,8 @@ class OrdersController extends Controller
     public function index()
     {
         //
+        $orders = Orders::all();
+        return view('')
     }
 
     /**
@@ -150,9 +152,70 @@ class OrdersController extends Controller
     }
 
     public function kredivoPushUri(Request $request){
+
+        $order_id = $request->order_id;
+        $order_payment = Orders::where('invoice_id', $order_id)->first();
+        if($request->status == 'OK'){
+            
+            $order_payment->payment_status = 1;
+        }else{
+            $order_payment->payment_status = 0;
+        }
+
+        $order_payment->save();
+
+
+        $payment = new Payment();
+        $payment->order_id = $request->order_id;
+        $payment->transaction_status = $request->transaction_status; 
+        $payment->amount = $request->amount; 
+        $payment->payment_type = $request->payment_type; 
+        $payment->message = $request->message; 
+        $payment->json_obj = json_encode($request->all()); 
+        $payment->transaction_time = $request->transaction_time; 
+        $payment->transaction_id = $request->transaction_id; 
+        $payment->signature_key = $request->signature_key;
+
+        $payment->save();
+
+        $url = "https://sandbox.kredivo.com/kredivo/v2/update?transaction_id={$request->transaction_id}&signature_key={$request->signature_key}";
+
+        $curl = curl_init();
+
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "Cache-Control: no-cache",
+            "Connection: keep-alive",
+            "Host: https://sandbox.kredivo.com",
+            "User-Agent: PostmanRuntime/7.17.1",
+            "cache-control: no-cache"
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+        echo "cURL Error #:" . $err;
+        } else {
+        echo $response;
+        }
+
+
            $new =  array("status" => "OK",
             "message" => "Received api request from kredivo for apstrofi",
-            "redirect_url" => "https://sandbox.kredivo.com/kredivo/v2/signin?tk=XXX"
             );
 
         return \response()->json($new);
@@ -189,7 +252,7 @@ class OrdersController extends Controller
 
         $curl = curl_init();
 
-        
+
         curl_setopt_array($curl, array(
         CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
