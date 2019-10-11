@@ -183,6 +183,7 @@ class OrdersController extends Controller
         $orders = Orders::find($id);
         $orders->payment_status = 'Paid';
         $orders->save();
+
     }
 
     /**
@@ -230,34 +231,51 @@ class OrdersController extends Controller
 
         $payment->save();
 
-        $url = "https://sandbox.kredivo.com/kredivo/v2/update?transaction_id={$request->transaction_id}&signature_key={$request->signature_key}";
+        $param = array(
+				'transaction_id' =>  $request->transaction_id,
+				'signature_key' => $request->signature_key,
+			);
+			
+   // print_r($param);		
 
-        $curl = curl_init();
-
-
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_HTTPHEADER => array(
-            "Accept: */*",
-            "Accept-Encoding: gzip, deflate",
-            "Cache-Control: no-cache",
-            "Connection: keep-alive",
-            "Host: https://sandbox.kredivo.com",
-            "User-Agent: PostmanRuntime/7.17.1",
-            "cache-control: no-cache"
-        ),
+    $url = 'https://sandbox.kredivo.com/kredivo/v2/update?' . http_build_query($param);
+    //echo $url;
+   	
+	$post = 0;
+	$request = array();
+		
+	$ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL            => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_TIMEOUT        => 13,
+            CURLOPT_USERAGENT      => "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36",
+            CURLOPT_CUSTOMREQUEST  => $post ? 'POST' : 'GET',
+            CURLOPT_POST           => $post,
+            CURLOPT_POSTFIELDS     => json_encode($request),
+            CURLOPT_HTTPHEADER     => array(
+                'Content-Type: application/json; charset=UTF-8',                
+            ),
         ));
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        $response = curl_exec($ch);   
+        
+		// save information that you need in your side
+		// status settlement : merchant update transaction into paid 
+		//var_dump ( $response);
+		
+		$response = array (
+				    "status"	=> 'OK',
+					"message"	=> 'Message if any',					
+	    );
+		
+		echo json_encode($response);
+        //exit();
+		
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
         // if ($err) {
         // echo "cURL Error #:" . $err;
@@ -265,11 +283,11 @@ class OrdersController extends Controller
         // echo $response;
         // }
 
-        $new =  array("status" => "OK",
-        "message" => "Received api request from kredivo for apstrofi",
-        );
+        // $new =  array("status" => "OK",
+        // "message" => "Received api request from kredivo for apstrofi",
+        // );
 
-        return \response()->json($new);
+        // return \response()->json($new);
     }
 
     // public function kredivoNotify(Request $request){
