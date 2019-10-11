@@ -44,7 +44,7 @@ As there are a lot of browsers being supported it might take a while to accept a
 
 
 You can use the `raphaelTest.html` to try things, you need to start a server in the root dir to start testing things there.
-Something like running `python -m SimpleHTTPServer` in the `raphael` directory and hitting `http://18.188.214.35/dev/raphaelTest.html` with the browser. You should run `npm run start` before this can work.
+Something like running `python -m SimpleHTTPServer` in the `raphael` directory and hitting `http://localhost:8000/dev/raphaelTest.html` with the browser. You should run `npm run start` before this can work.
 
 
 ## Collaborators

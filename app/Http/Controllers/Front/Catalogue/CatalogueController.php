@@ -45,7 +45,7 @@ class CatalogueController extends Controller
         if($size) {
             $query->whereIn('products.attribute_value_size_id', $size);
         }
-        $query->where('products.sizing_gender', $sizing_gender);
+        $query->whereIn('products.sizing_gender', [$sizing_gender, 'NONE']);
 
         $query->where('products.status', 1);
         
