@@ -1,7 +1,7 @@
 <?php
 
 Route::group(['middleware'=>'admin.guest'], function ($api) {
-    $api->get('/', 'LoginController@showLoginForm');
+    $api->get('/', 'LoginController@showLoginForm')->name('admin');
     $api->post('login', 'LoginController@login')->name('admin.login');
 });
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CommonResource;
 use App\Http\Resources\HomeResource;
 use App\Models\CommonContent;
+use App\Models\CommonPageContent;
 use App\Models\PageBuilder;
 
 
@@ -116,5 +117,12 @@ class PageController extends Controller
     public function common(){
         $commanData = CommonContent::first();
         return new CommonResource($commanData);
+    }
+
+    public function commonPageContent($page) {
+        //This api is for getting common static pages
+        //on front like about us, contact us etc...
+        $commonPageData = CommonPageContent::where('slug', $page)->first();
+        return new CommonResource($commonPageData);
     }
 }

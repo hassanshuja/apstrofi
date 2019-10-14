@@ -25,7 +25,7 @@ class ContactContentController extends Controller{
             'title' => 'required',
             'description'=> 'required'
         ],[], $niceNames);
-        $data['slug'] = 'contact';
+        $data['slug'] = 'contactus';
         CommonPageContent::updateOrCreate(['slug'=>'contact'],$data);
     }
 

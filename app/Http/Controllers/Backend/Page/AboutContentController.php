@@ -25,7 +25,7 @@ class AboutContentController extends Controller{
             'title' => 'required',
             'description'=> 'required'
         ],[], $niceNames);
-        $data['slug'] = 'about';
+        $data['slug'] = 'aboutus';
         CommonPageContent::updateOrCreate(['slug'=>'about'],$data);
     }
 

@@ -7,6 +7,6 @@ class CommonPageContent extends Model {
 
     protected $table = 'commonpage_content';
 
-    protected $fillable = ['title','sub_title','description','slug'];
+    protected $fillable = ['title','sub_title','description','slug', 'title_l', 'description_l'];
 
 }

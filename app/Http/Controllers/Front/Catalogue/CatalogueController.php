@@ -27,6 +27,8 @@ class CatalogueController extends Controller
 		$subcategory_id = isset($request->subcategory_id) ? json_decode($request->subcategory_id) : null;
         $sizing_gender = isset($request->sizing_gender) ? $request->sizing_gender : null;
         $sortby = isset($request->sortby) ? $request->sortby : null;
+        $newarrivals = isset($request->newarrivals) ? $request->newarrivals : null;
+        $sustainable = isset($request->sustainable) ? $request->sustainable : null;
         // dd($sizing_gender,$request->sizing_gender,isset($request->sizing_gender));
         $category_id = $request->route('id');
         // dd($category_id);
@@ -34,8 +36,14 @@ class CatalogueController extends Controller
                 ->select('products.id', 'products.name','products.brand_id', 'products.name_l', 
                         'products.sizing_gender','products.sizing_type','products.category_id', 
                         'price')
-                ->leftJoin('categories', 'categories.id', '=','products.category_id' )
-                ->where('categories.parent_id', $category_id);
+                ->leftJoin('categories', 'categories.id', '=','products.category_id' );
+                // dd(!$sustainable, !isset($newarrivals));
+        if(!$sustainable && !isset($newarrivals)){
+            $query->where('categories.parent_id', $category_id);
+        }
+        if(!$newarrivals && !isset($sustainable)){
+            $query->where('categories.parent_id', $category_id);
+        }
         if($subcategory_id){
             $query->where('products.category_id', $subcategory_id);
         }
@@ -49,6 +57,13 @@ class CatalogueController extends Controller
 
         $query->where('products.status', 1);
         
+        if($newarrivals) {
+            $query->where('is_new_arrival', 1);
+        }
+
+        if($sustainable) {
+            $query->where('is_sustainable', 1);
+        }
         // $query->with(['product_categories' => function($q, $category_id){
         //     $q->where('parent_id', $category_id);
         // }]);
@@ -60,6 +75,7 @@ class CatalogueController extends Controller
             }
         }
         $result = $query->with(['product_images', 'product_brand' ])->paginate(12);
+        // $result = $query->with(['product_images', 'product_brand' ])->toSql();
         return $result;
     }
 
