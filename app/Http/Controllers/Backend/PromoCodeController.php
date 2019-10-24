@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\PromoCode;
+use Illuminate\Support\Carbon;
+
 
 class PromoCodeController extends Controller{
 
@@ -103,5 +105,15 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
     {
         PromoCode::destroy($id);
         return response()->json(['status'=>true,'msg'=>'Record Deleted Successfully.']);
+    }
+
+    public function getdetails($code){
+        $details = PromoCode::where('code', $code)->where('status', 1)  ->get()->filter(function($item){
+            if(Carbon::now()->between($item->start_at, $item->end_at)){
+                return  $item;
+            }
+        })->values()->toArray();
+
+        return response()->json($details);
     }
 }

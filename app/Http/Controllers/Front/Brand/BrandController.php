@@ -19,6 +19,9 @@ class BrandController extends Controller
     public function productList($slug){
         $brandId = Brand::where('slug',$slug)->value('id');
 
-        Product::where('status',1)->where('brand_id',$brandId)->get();
+        $brand_product = Product::where('status',1)->where('brand_id',$brandId)->get();
+
+        return response()->json($brand_product);
+
     }
 }

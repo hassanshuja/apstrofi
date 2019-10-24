@@ -87,7 +87,7 @@ Route::group(['middleware'=>['admin.auth'],'as'=>'admin.'], function ($api) {
     $api->post('blog/change-status',['as'=>'blog.change-status','uses'=>'BlogController@changeStatus']);
     $api->get('blog/view-images/{id}',['as'=>'blog.view-images','uses'=>'BlogController@viewImages']);
     $api->delete('blog/delete-image/{id}',['as'=>'blog.delete-image','uses'=>'BlogController@deleteImage']);
-    $api->post('blog/list-images',['as'=>'blog.list-images','uses'=>'BlogController@listImages']);
+    $api->get('blog/list-images/{id}',['as'=>'blog.list-images','uses'=>'BlogController@listImages']);
     $api->post('blog/update-image-order',['as'=>'blog.update-blog-image-order','uses'=>'BlogController@updateImageOrder']);
     $api->resource('blog', 'BlogController',['names' => [
         'index'=>'blog.index',

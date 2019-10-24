@@ -46,24 +46,28 @@
                         <div id="kt_repeater_2">
                             <div class="form-group ">
                                 <label class="col-lg-12 col-form-label">Select Product: <div data-repeater-create="" class="btn btn btn-sm btn-brand btn-pill">
-															<span>
-																<i class="la la-plus"></i>
-																<span>Add</span>
-															</span>
-                                    </div></label>
+                                    <span>
+                                        <i class="la la-plus"></i>
+                                        <span>Add</span>
+                                    </span>
+                                    </div>
+                                </label>
+                                
                                 <div class="kt-form__control">
                                     <div data-repeater-list="product" class="col-lg-12">
                                         <div data-repeater-item class="form-group row align-items-center">
+                                                
                                             <div class="col-sm-5">
+                                                
                                                 <div class="kt-form__group--inline">
                                                     <div class="kt-form__label">
                                                         <label>Name:</label>
                                                     </div>
                                                     <div class="kt-form__control">
-                                                        <select class="form-control"  name="product_id">
+                                                        <select class="form-control" name="product_id">
                                                             <option value="">Select Product</option>
                                                             @foreach($product as $key=>$val)
-                                                                <option value="{!! $key !!}">{!! $val !!}</option>
+                                                                <option data-tokens="{!! $val !!}" value="{!! $key !!}">{!! $val !!}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -152,3 +156,5 @@
         </div>
     </div>
 </div>
+
+

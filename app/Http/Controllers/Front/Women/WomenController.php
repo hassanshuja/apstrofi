@@ -20,7 +20,7 @@ class WomenController extends Controller
     public function getAllProducts() {
         $products = Product::select('*')->whereHas('tags', function ($query) {
             $query->where('title', 'Women');
-        })->latest()->with('tags', 'product_images', 'product_brand', 'product_categories')->get();
+        })->latest()->with('tags', 'product_images', 'product_brand', 'product_categories')->limit(20)->get();
         return $products;
     }
 

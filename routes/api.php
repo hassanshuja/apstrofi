@@ -43,15 +43,19 @@ Route::get('page/catalogue/{id}',['as'=>'page.catalogue','uses'=>'Front\Catalogu
 Route::get('men/allproducts',['as'=>'men.allproducts','uses'=>'Front\Men\MenController@getAllProducts']);
 Route::get('men/featuredproducts',['as'=>'men.featuredproducts','uses'=>'Front\Men\MenController@getFeaturedProducts']);
 
+
 /* WOMEN ROUTES*/
 Route::get('women/allproducts',['as'=>'women.allproducts','uses'=>'Front\Women\WomenController@getAllProducts']);
 Route::get('women/featuredproducts',['as'=>'women.featuredproducts','uses'=>'Front\Women\WomenController@getFeaturedProducts']);
 
+
+Route::get('products/featuredproducts',['as'=>'products.featuredproducts','uses'=>'Front\Products\ProductsController@allfeaturedProducts']);
 Route::resource('products', 'Front\Products\ProductsController');
 /* CATALOGUE ROUTES*/
 Route::get('product/colors',['as'=>'product.colors','uses'=>'Front\Catalogue\CatalogueController@getProductColors']);
 Route::get('product/sizes',['as'=>'product.sizes','uses'=>'Front\Catalogue\CatalogueController@getProductSizes']);
 
+Route::get('page/search/{id}',['as'=>'page.search','uses'=>'Front\Catalogue\CatalogueController@searchCatalogue']);
 
 // Route::get('/vtweb', 'PagesController@vtweb');
 
@@ -75,3 +79,13 @@ Route::resource('orders', 'Backend\OrdersController');
 
 
 Route::resource('orderDetails', 'Backend\OrderDetailsController');
+
+//get disocunts 
+Route::get('discount/cart',['as'=>'discount.cart','uses'=>'Backend\DiscountCartController@index']);
+Route::get('discount/category',['as'=>'discount.category','uses'=>'Backend\DiscountCategoryController@index']);
+Route::get('discount/shipping',['as'=>'discount.shipping','uses'=>'Backend\DiscountCartController@shipping']);
+
+//get promocode details
+Route::get('promo/getdetails/{code}',['as'=>'promo.getdetails','uses'=>'Backend\PromoCodeController@getdetails']);
+
+Route::resource('payment', 'Backend\PaymentController');

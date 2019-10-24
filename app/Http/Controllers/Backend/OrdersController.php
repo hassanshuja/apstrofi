@@ -93,11 +93,13 @@ class OrdersController extends Controller
     public function store(Request $request)
     {
         //
+        // return response()->json($request->all());
+        
         //getting invoice id for increment if there is no 
         //record then generate invoice id
         $order_id = Orders::orderby('created_at', 'desc')->first();
         if($order_id == NULL){
-            $num = 1000;
+            $num = 10000;
             $invoice_id = str_pad($num, 4, '0', STR_PAD_LEFT);
         }else{
             $invoice_id = $order_id->invoice_id + 1;
@@ -110,11 +112,15 @@ class OrdersController extends Controller
         $order->shipping_details = json_encode($request->final_detail['shipping_details']);
         $order->shipping_amount = $request->final_detail['shipping_total']; 
         $order->shipping_discount = $request->final_detail['shipping_discount'];
+        //this is discount and promo object
+        $order->discount_promo_obj = json_encode($request->discount);
         $order->subtotal = $request->sub_total;
         $order->grandtotal = $request->final_detail['grandTotal'];
         $order->merchants = json_encode($request->final_detail['merchants']); 
         $order->customer_id = 1;
-        $order->payment_status = 0;
+        $order->payment_status = 'Unpaid';
+        //1 for kredivo and 2 for midtrans => we will proceed midtrans on snapcontroller not here.
+        $order->payment_method = 1;
 
         $order->save();
 
@@ -137,6 +143,7 @@ class OrdersController extends Controller
                 $order_details->selected_quantity = $orderItem['selected_quantity'];
                 $order_details->product_name = $orderItem['name'];
                 $order_details->product_price = $orderItem['price'];
+                $order_details->product_discount = $orderItem['product_discount'];
                 $order_details->modals = $orderItem['modal'];
                 $order_details->full_obj = json_encode($orderItem); 
                 $order_details->save();
@@ -181,7 +188,7 @@ class OrdersController extends Controller
     public function update(Request $request, $id)
     {
         $orders = Orders::find($id);
-        $orders->payment_status = 'Paid';
+        $orders->payment_status = 1;
         $orders->save();
 
     }
@@ -207,10 +214,13 @@ class OrdersController extends Controller
 
     public function kredivoPushUri(Request $request){
 
+        // dd($request->order_id);
         $order_id = $request->order_id;
         $order_payment = Orders::where('invoice_id', $order_id)->first();
+        
         if($request->status == 'OK'){
-            $order_payment->payment_status = 1;
+            //pending status is 4 in db and 0 is unpaid
+            $order_payment->payment_status = 4;
         }else{
             $order_payment->payment_status = 0;
         }
@@ -232,9 +242,9 @@ class OrdersController extends Controller
         $payment->save();
 
         $param = array(
-				'transaction_id' =>  $request->transaction_id,
-				'signature_key' => $request->signature_key,
-			);
+            'transaction_id' =>  $request->transaction_id,
+            'signature_key' => $request->signature_key,
+        );
 			
    // print_r($param);		
 
@@ -267,8 +277,8 @@ class OrdersController extends Controller
 		//var_dump ( $response);
 		
 		$response = array (
-				    "status"	=> 'OK',
-					"message"	=> 'Message if any',					
+            "status"	=> 'OK',
+            "message"	=> 'Message if any',					
 	    );
 		
 		echo json_encode($response);

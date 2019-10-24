@@ -9,6 +9,7 @@ use App\Models\BlogProducts;
 use App\Models\Product;
 use Image;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 class BlogController extends Controller{
 
     public function index()
@@ -148,7 +149,7 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
         return response()->json(true);
     }
 
-    public function update($id){
+    public function update(Request $request,$id){
         $data = request()->all();
         $this->validate(request(),[
             'title' => 'required|string|max:255'
@@ -162,6 +163,7 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
             $record->products()->sync($data['product_id']);
         }
 
+       
         if(request()->hasFile('image')) {
             $files = request()->file('image');
             $images_array = [];
@@ -198,6 +200,8 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
 
                 //create small thumbnail
                 $smallthumbnailpath = public_path('storage/images/blog/thumbnail/'.$record['id'].'/'.$smallthumbnail);
+                // return response()->json($smallthumbnailpath );
+
                 $this->createThumbnail($smallthumbnailpath, 150, 93);
 
                 /*//create medium thumbnail

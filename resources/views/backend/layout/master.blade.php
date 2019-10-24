@@ -47,6 +47,7 @@ Contact: shrenik9992@gmail.com
     <!--begin::Global Theme Styles(used by all pages) -->
     <link href="{!! asset('backend/assets/demo/default/base/style.bundle.css') !!}" rel="stylesheet" type="text/css" />
     <link href="{!! asset('backend/css/custom.css') !!}" rel="stylesheet" type="text/css" />
+    {{-- <link href="{!! asset('css/bootstrap-select.css') !!}" rel="stylesheet" type="text/css" /> --}}
 
     <!--end::Global Theme Styles -->
 
@@ -166,6 +167,8 @@ Contact: shrenik9992@gmail.com
 <!--begin::Global Theme Bundle(used by all pages) -->
 <script src="{!! asset('backend/assets/vendors/general/jquery-form/dist/jquery.form.min.js') !!}" type="text/javascript"></script>
 <script src="{!! asset('backend/assets/demo/default/base/scripts.bundle.js') !!}" type="text/javascript"></script>
+{{-- <script src="{!! asset('backend/js/bootstrap-select.js') !!}"  type="text/javascript" ></script> --}}
+
 <script type="text/javascript">
     $.ajaxPrefilter(function(options, originalOptions, xhr) {
         var token = $('meta[name="csrf_token"]').attr('content');

@@ -5,10 +5,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Discount;
 use App\Models\DiscountCategory;
 use App\Models\Product;
-
+use Illuminate\Support\Carbon;
 
 class DiscountCategoryController extends Controller{
 
+    public function index() {
+
+        $category_discount = Discount::where('discount_related', 1)
+                            ->where('status', 1)
+                            ->with('discount_category')
+                            ->get()
+                            ->filter(function($item){
+                                if(Carbon::now()->between($item->start_at, $item->end_at)){
+                                    return  $item;
+                                }
+                            })->values()->toArray();  
+                            
+        return response()->json($category_discount);
+    }
 
     public function listAjax(){
 

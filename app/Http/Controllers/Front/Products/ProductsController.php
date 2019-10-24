@@ -21,14 +21,18 @@ class ProductsController extends Controller
     public function show($id)
     {
 
-        $product = Product::where('id',$id)->with('product_images','tags', 'product_categories')->first()->toArray();
+        $product = Product::where('id',$id)
+                    ->with('product_images','tags', 'product_categories','product_discount', 'product_color')
+                    ->first()
+                    ->toArray();
         // $modal_colors = Product::where('modal', $product['modal'])->pluck('attribute_value_color_id');
-        $modal_colors = Product::where('modal', $product['modal'])->get()->pluck('attribute_value_color_id')->toArray();
-        $modal_colors_productsid = Product::where('modal', $product['modal'])->get()->pluck('id')->toArray();
-// dd($modal_colors);
+        // $modal_colors = Product::where('modal', $product['modal'])->get()->pluck('attribute_value_color_id')->toArray();
+        // $modal_colors_productsid = Product::where('modal', $product['modal'])->get()->pluck('id')->toArray();
+        // dd($modal_colors_productsid, $modal_colors  );
         $modal_sizes = Product::where('modal', $product['modal'])->pluck('attribute_value_size_id');
         $brand = Brand::where('status',1)->pluck('name','id');
-        $colors = AttributeValue::where('attribute_id',2)->whereIn('id', $modal_colors)->pluck('name')->toArray();
+        // $colors = AttributeValue::where('attribute_id',2)->whereIn('id', $modal_colors)->pluck('name')->toArray();
+        // dd($modal_colors_productsid, $colors);
 
         $sizes = ProductAttributeValue::where('product_id', $id)->where('qty', '>', '0')
         ->leftJoin('attribute_values', 'attribute_values.id', '=', 'product_attribute_value.attribute_value_size_id')
@@ -51,9 +55,9 @@ class ProductsController extends Controller
 
         return response()->json([
           'brand'=>$brand,
-          'productsId'=> $modal_colors_productsid,
-          'colors'=>$colors,
-          'modal_colors'=> $modal_colors,
+        //   'productsId'=> $modal_colors_productsid,
+        //   'colors'=>$colors,
+        //   'modal_colors'=> $modal_colors,
           'sizes'=>$sizes,
           'product'=>$product,
           'category'=>$category,
@@ -62,4 +66,11 @@ class ProductsController extends Controller
         );
     }
 
+
+    public function allfeaturedProducts() {
+      $products = Product::with('tags', 'product_images', 'product_brand', 'product_categories')->where('is_featured', 1)->where('status', 1)->take(12)->get();
+    return $products;
+  }
+
+    
 }

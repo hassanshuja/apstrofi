@@ -152,7 +152,7 @@
                 },
                 'ajax': {
                     'url': url,
-                    'type': 'POST',
+                    'type': 'GET',
                     /*'data': function (d) { // do in this way, otherwise table.ajax.reload() not working
                         Object.assign(d, getParams());
                         return d;
@@ -176,7 +176,7 @@
                 $.ajax({
                     url: updateUrl,
                     dataType: 'json',
-                    type: 'post',
+                    type: 'get',
                     async: false, // disable async, otherwise the table will reload before the db update
                     data: {
                         seqs: postData,

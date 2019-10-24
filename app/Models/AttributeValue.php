@@ -16,4 +16,9 @@ class AttributeValue extends Model {
         return $this->belongsTo(Attribute::class,'attribute_id','id');
     }
 
+    public function getid(){
+        return $this->belongsToMany(Product::class,'attribute_values', 'name', 'id', 'modal', 'attribute_value_color_id')
+                ->where('attribute_id', 2);
+    }
+
 }

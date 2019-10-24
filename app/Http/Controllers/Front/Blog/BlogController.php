@@ -25,7 +25,7 @@ class BlogController extends Controller
 
             }
         }
-///pr($blogs); die;
+//pr($blogs); die;
         return BlogResource::collection(
             $blogs
         );

@@ -3,9 +3,22 @@
 namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
+use Illuminate\Support\Carbon;
+
 
 class DiscountCartController extends Controller{
 
+    public function index() {
+        $cartDiscount = Discount::where('status', 1)
+                        ->where('discount_related', 0)
+                        ->get()
+                        ->filter(function($item){
+                            if(Carbon::now()->between($item->start_at, $item->end_at)){
+                                return  $item;
+                            }
+                        })->values()->toArray();
+        return response()->json($cartDiscount);
+    }
 
 
     public function listAjax(){
@@ -113,6 +126,20 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
     {
         Discount::destroy($id);
         return response()->json(['status'=>true,'msg'=>'Record Deleted Successfully.']);
+    }
+
+    public function shipping() {
+        $shippingDiscount = Discount::where('status', 1)
+        ->where('discount_related', 0)
+        ->whereIn('title', ['shipping1', 'shipping2'])
+        ->get()
+        // ->filter(function($item){
+        //     if(Carbon::now()->between($item->start_at, $item->end_at)){
+        //         return  $item;
+        //     }
+        // })->values()
+        ->toArray();
+        return response()->json($shippingDiscount);
     }
 
 }

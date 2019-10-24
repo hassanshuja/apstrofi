@@ -17,10 +17,11 @@ use Illuminate\Support\Facades\Storage;
 
 class MenController extends Controller
 {
+
     public function getAllProducts() {
         $products = Product::select('*')->whereHas('tags', function ($query) {
             $query->where('title', 'Men');
-        })->latest()->with('tags', 'product_images', 'product_brand', 'product_categories')->get();
+        })->latest()->with('tags', 'product_images', 'product_brand', 'product_categories')->limit(20)->get();
         return $products;
     }
 

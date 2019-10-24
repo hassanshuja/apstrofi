@@ -54,11 +54,14 @@ class SnapController extends Controller
         $order->shipping_details = json_encode($request->final_detail['shipping_details']);
         $order->shipping_amount = $request->final_detail['shipping_total']; 
         $order->shipping_discount = $request->final_detail['shipping_discount'];
+        $order->discount_promo_obj = json_encode($request->discount);
         $order->subtotal = $request->sub_total;
         $order->grandtotal = $request->final_detail['grandTotal'];
         $order->merchants = json_encode($request->final_detail['merchants']); 
         $order->customer_id = 1;
-        $order->payment_status = 0;
+        $order->payment_status = 'Unpaid';
+        //2 for midtrans
+        $order->payment_method = 2;
 
         $order->save();
 
@@ -81,6 +84,7 @@ class SnapController extends Controller
                 $order_details->selected_quantity = $orderItem['selected_quantity'];
                 $order_details->product_name = $orderItem['name'];
                 $order_details->product_price = $orderItem['price'];
+                $order_details->product_discount = $orderItem['product_discount'];
                 $order_details->modals = $orderItem['modal'];
                 $order_details->full_obj = json_encode($orderItem); 
                 $order_details->save();
@@ -94,7 +98,7 @@ class SnapController extends Controller
 
 
         $transaction_details = array(
-            'order_id'      => 'AAA-'.$invoice_id,
+            'order_id'      => $invoice_id,
             'gross_amount'  => $request->final_detail['grandTotal']
         );
 
@@ -111,14 +115,41 @@ class SnapController extends Controller
 
             $items[$key] = $itemData;
         }
-
+// return response()->json(array('item' => $items, 'total'=>$transaction_details));
         $items[count($items)] = array(
             'id'        => 'shipping',
-            'price'     => $request->final_detail['shipping_total'],
+            'price'     => $request->final_detail['shipping_total_after_discount'],
             'quantity'  => 1,
             'name'      => 'Shipping'
         );
         // // Populate customer's billing address
+        $items[count($items)] = array(
+            'id'        => 'cart_discount',
+            'price'     => '-'.$request->discount['cart_discount'],
+            'quantity'  => 1,
+            'name'      => 'Cart Discount'
+        );
+
+        if($request->discount['category_discount']){
+            $items[count($items)] = array(
+                'id'        => 'category_discount',
+                'price'     => '-'.$request->discount['category_discount'],
+                'quantity'  => 1,
+                'name'      => 'Category Discount'
+            );
+        }
+        
+        if($request->discount['promo_total']){
+            $items[count($items)] = array(
+                'id'        => 'promo_total',
+                'price'     => '-'.$request->discount['promo_total'],
+                'quantity'  => 1,
+                'name'      => 'Promo Discount'
+            );
+        }
+        
+// return response()->json(array('item' => $items, 'total'=>$transaction_details));
+
         $billing_address = array(
             'first_name'    => $request->final_detail['shipping_details']['name'],
             'last_name'     => "",

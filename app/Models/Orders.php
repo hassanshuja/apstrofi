@@ -17,7 +17,7 @@ class Orders extends Model
         
         $order_id = $this::orderby('created_at', 'desc')->first();
         if($order_id == NULL){
-            $num = 1000;
+            $num = 10000;
             $invoice_id = str_pad($num, 4, '0', STR_PAD_LEFT);
         }else{
             $invoice_id = $order_id->invoice_id + 1;

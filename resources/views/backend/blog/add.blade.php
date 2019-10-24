@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form class="formAdd" onsubmit="return false;"   role="form">
+                <form class="formAdd" onsubmit="return false;"   role="form" enctype="multipart/form-data"> 
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group kt-form__group">

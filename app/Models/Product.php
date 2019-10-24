@@ -18,11 +18,9 @@ class Product extends Model {
         }else{
             return '<div class="col-3"><span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success"><label><input type="checkbox" data-id="'.$this->attributes['id'].'" data-action="'.route("admin.product.change-status").'" class="change_status" ><span></span></label></span></div>';
         }
-
     }
 
     public function product_categories(){
-
         return $this->belongsTo(Category::class,'category_id','id');
     }
 
@@ -35,6 +33,15 @@ class Product extends Model {
         return $this->hasMany(ProductImages::class,'product_id','id');
     }
 
+    public function product_discount(){
+        return $this
+                ->hasMany(DiscountProduct::class,'product_id','id')
+                ->with('discount');
+    }
+
+    public function product_color(){
+       return $this->belongsToMany(AttributeValue::class,'products','modal', 'attribute_value_color_id', 'modal', 'id')->withPivot('id');
+    }
     /*public function product_attribute(){
         return $this->belongsToMany(AttributeValue::class,'product_attribute_value','product_id','attribute_value_id');
     }*/
