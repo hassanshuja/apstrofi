@@ -189,6 +189,7 @@ Route::group(['middleware'=>['admin.auth'],'as'=>'admin.'], function ($api) {
     /*Tag*/
     $api->post('tag/list-ajax',['as'=>'tag.list-ajax','uses'=>'TagController@listAjax']);
     $api->post('tag/change-status',['as'=>'tag.change-status','uses'=>'TagController@changeStatus']);
+    $api->post('tag/change-gender',['as'=>'tag.change-gender','uses'=>'TagController@changegender']);
     $api->post('tag/change-home-style',['as'=>'tag.change-home-style','uses'=>'TagController@changeHomeStyle']);
     $api->resource('tag', 'TagController',['names' => [
         'index'=>'tag.index',

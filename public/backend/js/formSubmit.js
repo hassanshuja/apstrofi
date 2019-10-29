@@ -158,11 +158,15 @@ jQuery(document).ready(function() {
 
     });
     $(document).on('change', '.change_status', function (event, state) {
+        
         var status = 0;
         if ($(this).is(':checked')) {
             status = 1;
         }else {
             status = 0;
+        }
+        if($(event.target).is('select')){
+            status = event.target.value
         }
         var url = $(this).data('action');
         var id = $(this).data('id');

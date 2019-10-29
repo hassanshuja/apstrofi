@@ -75,6 +75,7 @@
                     <th>Title(Eng) </th>
                     <th>Title(Indo) </th>
                     <th>Image </th>
+                    <th class="no-sort">Gender </th>
                     <th> Is Home Style? </th>
                     <th> Status </th>
                     <th class="no-sort"> Actions </th>
@@ -85,8 +86,9 @@
                     <th>Title(Eng) </th>
                     <th>Title(Indo) </th>
                     <th>Image </th>
-                    <th>Image </th>
+                    <th class="no-sort">Gender </th>
                     <th> Is Home Style? </th>
+                    <th>Status </th>
                     <th class="no-sort"> Actions </th>
                 </tr>
                 </tfoot>

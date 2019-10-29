@@ -39,6 +39,9 @@ Route::post('merchantDetails',['as'=>'merchantDetails','uses'=>'Front\Merchant\M
 // Route::resource('subscription', '');
 Route::get('page/catalogue/{id}',['as'=>'page.catalogue','uses'=>'Front\Catalogue\CatalogueController@index']);
 
+//this is for Tag list on catalogue page on front
+Route::get('page/generalcatalogue',['as'=>'page.generalcatalogue','uses'=>'Front\Catalogue\CatalogueController@generalCatalogue']);
+
 /* MEN ROUTES*/
 Route::get('men/allproducts',['as'=>'men.allproducts','uses'=>'Front\Men\MenController@getAllProducts']);
 Route::get('men/featuredproducts',['as'=>'men.featuredproducts','uses'=>'Front\Men\MenController@getFeaturedProducts']);
@@ -89,3 +92,7 @@ Route::get('discount/shipping',['as'=>'discount.shipping','uses'=>'Backend\Disco
 Route::get('promo/getdetails/{code}',['as'=>'promo.getdetails','uses'=>'Backend\PromoCodeController@getdetails']);
 
 Route::resource('payment', 'Backend\PaymentController');
+
+//Get All tags for Discover Your Style
+Route::get('tag/menTags',['as'=>'tag.menTags','uses'=>'Backend\TagController@menTags']);
+Route::get('tag/womenTags',['as'=>'tag.womenTags','uses'=>'Backend\TagController@womenTags']);

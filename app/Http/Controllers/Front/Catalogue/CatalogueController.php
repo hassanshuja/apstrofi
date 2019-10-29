@@ -81,6 +81,7 @@ class CatalogueController extends Controller
     }
 
 
+    //This is for search query
     public function searchCatalogue(Request $request){
        
         $colors = isset($request->colors) ? json_decode($request->colors) : null;
@@ -145,6 +146,62 @@ class CatalogueController extends Controller
         // $result = $query->with(['product_images', 'product_brand' ])->toSql();
         return $result;
     }
+
+    //This listing is for tags and can be used without parent id in category
+    //or got general purpose
+
+    public function generalCatalogue(Request $request){
+        $colors = isset($request->colors) ? json_decode($request->colors) : null;
+		$size = isset($request->size) ? json_decode($request->size) : null;
+		$tag_id = isset($request->tag_id) ? json_decode($request->tag_id) : null;
+        $sizing_gender = isset($request->sizing_gender) ? $request->sizing_gender : null;
+        $sortby = isset($request->sortby) ? $request->sortby : null;
+
+        // dd($sizing_gender,$request->sizing_gender,isset($request->sizing_gender));
+        // $category_id = $request->route('id');
+        // dd($category_id);
+        $query = Product::query()
+                ->select('products.id', 'products.name','products.brand_id', 'products.name_l', 
+                        'products.sizing_gender','products.sizing_type','products.category_id', 
+                        'price')
+                ->leftJoin('categories', 'categories.id', '=','products.category_id' )
+                ->leftJoin('product_tags', 'product_tags.product_id', '=','products.id' );
+                // dd(!$sustainable, !isset($newarrivals));
+        // if(!$sustainable && !isset($newarrivals)){
+        //     $query->where('categories.parent_id', $category_id);
+        // }
+        // if(!$newarrivals && !isset($sustainable)){
+        //     $query->where('categories.parent_id', $category_id);
+        // }
+        if($tag_id){
+            $query->where('product_tags.tag_id', $tag_id);
+        }
+        if($colors) {
+        	$query->whereIn('products.attribute_value_color_id', $colors);
+        }
+        if($size) {
+            $query->whereIn('products.attribute_value_size_id', $size);
+        }
+        $query->whereIn('products.sizing_gender', [$sizing_gender, 'NONE']);
+
+        $query->where('products.status', 1);
+
+        // $query->with(['product_categories' => function($q, $category_id){
+        //     $q->where('parent_id', $category_id);
+        // }]);
+        if($sortby){
+            if($sortby == 'asc' || $sortby == 'desc'){
+                $query->orderBy('price', $sortby);
+            }else{
+                $query->latest('products.created_at');
+            }
+        }
+        $result = $query->with(['product_images', 'product_brand', 'product_discount' ])->paginate(12);
+        // dd($result);
+        // $result = $query->with(['product_images', 'product_brand' ])->toSql();
+        return $result;
+    }
+
 
     public function getProductColors () {
         $colors = AttributeValue::select('id', 'name', 'attribute_id')->where('attribute_id',2)->get();

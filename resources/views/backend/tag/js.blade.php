@@ -9,7 +9,7 @@
     <script type="text/javascript">
         var list_url = '{!! route("admin.tag.list-ajax") !!}';
         var table_id = 'kt_table_1';
-        var columns = ['title','title_l','image','home_style','status','action'];
+        var columns = ['title','title_l','image','sizing_gender','home_style','status','action'];
         jQuery(document).ready(function() {
             Datatables.init(table_id,list_url,columns);
             var validationRule = {

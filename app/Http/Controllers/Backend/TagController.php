@@ -40,9 +40,27 @@ class TagController extends Controller{
         $records = $query->skip($iDisplayStart)->take($iDisplayLength)->get();
         foreach ($records as $key=>$val){
             $index = 0;
+            $none = '';
+            $men = '';
+            $women = '';
             $data[$key]['title'] = $val['title'];
             $data[$key]['title_l'] = $val['title_l'];
             $data[$key]['image'] = $val['image'];
+
+            if($val['sizing_gender'] == 'NONE'){
+                $none = 'selected';
+            }elseif($val['sizing_gender'] == 'MEN'){
+                $men = 'selected';
+            }elseif($val['sizing_gender'] == 'WOMEN'){
+                $women = 'selected';
+            }
+
+            $data[$key]['sizing_gender'] = '<div >
+            <select class="change_status form-control m-select2 select2-hidden-accessible" id="sizing_gender" name="sizing_gender"  data-action="'.route("admin.tag.change-gender").'" data-id="'.$val['id'].'" tabindex="-1" aria-hidden="true" >
+            <option value="NONE" data-select2-id="NONE" '.$none.'>NONE</option>
+            <option value="MEN" data-select2-id="MEN" '.$men.' >MEN</option>
+            <option value="WOMEN" data-select2-id="WOMEN" '.$women.' > WOMEN</option></select></div>';
+            // '<select class="form-control m-select2 select2-hidden-accessible" id="sizing_gender" name="sizing_gender" data-select2-id="'+$val['id']+'" tabindex="-1" aria-hidden="true"><option value="NONE" data-select2-id="NONE">NONE</option><option value="MEN" data-select2-id="MEN">MEN</option><option value="WOMEN" data-select2-id="WOMEN">WOMEN</option></select>';
             $data[$key]['home_style'] = $val['home_style'];
             $data[$key]['status'] = $val['status_val'];
             $action = '<div class="actions"><a class="edit btn btn-warning btn-sm" data-toggle="modal" data-modal="#kt_table_1" data-type="edit"  data-key="'.$key.'" data-action="'.route('admin.tag.update',$val['id']).'"   href="#add">Edit</a> <a data-toggle="confirmation"
@@ -92,6 +110,12 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
         return response()->json(true);
     }
 
+    public function changegender(){
+        $request = request()->all();
+        Tag::where('id',$request['id'])->update(['sizing_gender'=>$request['status']]);
+        return response()->json(true);
+    }
+
     public function update($id){
         $data = request()->all();
         $this->validate(request(),[
@@ -132,5 +156,26 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
         $request = request()->all();
         Tag::where('id',$request['id'])->update(['is_home_style'=>$request['status']]);
         return response()->json(true);
+    }
+
+    public function menTags(){
+
+        $tags = Tag::where('status', 1)
+                    ->where('is_home_style', 1)
+                    ->whereIn('sizing_gender', ['MEN', 'NONE'])
+                    ->get()->toArray();
+        
+
+        return \response()->json($tags);
+    }
+
+    public function womenTags() {
+        $tags = Tag::where('status', 1)
+                    ->where('is_home_style', 1)
+                    ->whereIn('sizing_gender', ['WOMEN', 'NONE'])
+                    ->get()->toArray();
+        
+
+        return \response()->json($tags);
     }
 }
