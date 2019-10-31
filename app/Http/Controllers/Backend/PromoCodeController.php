@@ -108,7 +108,8 @@ data-placement="top" href="javascript:void(0);" data-title="delete"  class="dele
     }
 
     public function getdetails($code){
-        $details = PromoCode::where('code', $code)->where('status', 1)  ->get()->filter(function($item){
+        $details = PromoCode::where('code', $code)->where('status', 1)->get()
+        ->filter(function($item){
             if(Carbon::now()->between($item->start_at, $item->end_at)){
                 return  $item;
             }

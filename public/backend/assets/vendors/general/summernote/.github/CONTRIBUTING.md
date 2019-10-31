@@ -22,7 +22,7 @@ At this point, you should now have a `build/` directory populated with everythin
 run local server with connect and watch.
 ```bash
 npm run start
-# Open a browser on http://localhost:3000.
+# Open a browser on http://gmbsconsultants.com.
 # If you change source code, automatically reload your page.
 ```
 

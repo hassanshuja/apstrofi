@@ -91,6 +91,7 @@ Route::get('discount/shipping',['as'=>'discount.shipping','uses'=>'Backend\Disco
 //get promocode details
 Route::get('promo/getdetails/{code}',['as'=>'promo.getdetails','uses'=>'Backend\PromoCodeController@getdetails']);
 
+// Route::post('payment/mtrans', 'Backend\PaymentController@store');
 Route::resource('payment', 'Backend\PaymentController');
 
 //Get All tags for Discover Your Style

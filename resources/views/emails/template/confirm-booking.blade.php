@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Set up a new password for Naqelati</title>
+    <title>Order Status From Apstrofi</title>
     <!--
     The style block is collapsed on page load to save you some scrolling.
     Postmark automatically inlines all CSS properties for maximum email client
@@ -398,8 +398,8 @@
             <table class="email-content" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <td class="email-masthead">
-                        <a href="http://naqelati.com" class="email-masthead_name">
-                            Naqelati
+                        <a href="http://apstrofi.com" class="email-masthead_name">
+                            Apstrofi
                         </a>
                     </td>
                 </tr>
@@ -410,11 +410,11 @@
                             <!-- Body content -->
                             <tr>
                                 <td class="content-cell">
-                                    <h1>Hi {{$data['name']}},</h1>
-                                    <p>You Booking {{$data['booking_id']}} is completed. Please find attachment below</p>
+                                    <h1>Hi</h1>
+                                    <p>You Order#{{$data['order_id']}} is completed. Please find attachment below</p>
                                     <!-- Action -->
                                     <p>Thanks,
-                                        <br>Naqelati</p>
+                                        <br>Apstrofi</p>
                                 </td>
                             </tr>
                         </table>
@@ -425,7 +425,7 @@
                         <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td class="content-cell" align="center">
-                                    <p class="sub align-center">&copy; {!! date('Y') !!} Naqelati. All rights reserved.</p>
+                                    <p class="sub align-center">&copy; {!! date('Y') !!} Apstrofi. All rights reserved.</p>
                                     {{--<p class="sub align-center">
                                         [Company Name, LLC]
                                         <br>1234 Street Rd.
