@@ -43,8 +43,7 @@ class PaymentController extends Controller
                ('Laravel Basic Testing Mail');
             $message->from('hassaan@clientsoftech.com','Virat Gandhi');
          });
-         echo "Basic Email Sent. Check your inbox.";
-         exit;
+
         //  $order_id = $request->order_id;
         //  $order_payment = Orders::where('invoice_id', $order_id)->first();
          
