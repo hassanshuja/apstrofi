@@ -110,11 +110,11 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $payment_status = Payment::where('order_id', $id)->first();
+        $payment_status = Payment::where('order_id', $request->order_id)->first();
         
         $payment_status->transaction_status = $request->transaction_status;
 
-        if($payment_status->update()){
+        if($payment_status->save()){
             return response()->json(array('message' => 'Updated successfull'), 201);
         }else{
             return response()->json(array('message' => 'Failed to Update'), 504);
