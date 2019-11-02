@@ -26,11 +26,10 @@ class OrdersController extends Controller
     public function listAjax(){
 
         $request = request()->all();
-        // dd($request);
         $data = [];
         $return_data = [];
         $query = new Orders();
-        $sortColumn = array('date','invoice_id','subtotal', 'shipping_discount', 'grandtotal', 'payment_status');
+        $sortColumn = array('date', 'order_detail', 'shipping_details', 'discount','customer_name','invoice_id','subtotal', 'shipping_discount', 'grandtotal', 'payment_method', 'payment_status');
         $sort_order = $request['order']['0']['dir'];
         $order_field = $sortColumn[$request['order']['0']['column']];
         if($order_field != ''){
@@ -45,22 +44,49 @@ class OrdersController extends Controller
                 $query = $query->where($val['data'],'like',"%" .$val['search']['value']. "%");
             }
         }
+
         $iTotalRecords = $query->count();
         $iDisplayLength = intval($request['length']);
         $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
         $iDisplayStart = intval($request['start']);
         $sEcho = intval($request['draw']);
-        $records = $query->skip($iDisplayStart)->take($iDisplayLength)->get();
+        $records = $query->skip($iDisplayStart)->take($iDisplayLength)->with('getcustomer')->get();
+
+        // dd($records[0]);
         foreach ($records as $key=>$val){
+
+            $customer_address = json_decode($val['shipping_details']);
+
+            $customer_details= array(
+                'name' => $val->getcustomer['name'],
+                'customer_phone' => $val->getcustomer['phone'],
+                'customer_address' => $customer_address->address
+            );
+
+            $order_details = $this->OrderDeailsById($val['id']);
+            if($val['payment_method'] == 1 ){
+                $payment_method = 'kredivo';
+            }elseif($val['payment_method'] == 2){
+                $payment_method = 'midtrans';
+            }else{
+                $payment_method = 'Not Recorded';
+            }
             $index = 0;
             $data[$key]['date'] = $val['date'];
+            $data[$key]['order_detail'] = json_encode($order_details, JSON_UNESCAPED_SLASHES);
+            $data[$key]['shipping_details'] = ($val['shipping_details']);
+            $data[$key]['discount'] = ($val['discount_promo_obj']);
+            $data[$key]['customer_detail'] = json_encode($customer_details, JSON_UNESCAPED_SLASHES);
             $data[$key]['invoice_id'] = $val['invoice_id'];
             $data[$key]['subtotal'] = $val['subtotal'];
             $data[$key]['shipping_discount'] = $val['shipping_discount'];
             $data[$key]['grandtotal'] = $val['grandtotal'];
+            $data[$key]['payment_method'] = $payment_method;
             $data[$key]['payment_status'] = $val['payment_status'];
             $action = '<div class="actions"> <a data-toggle="confirmation"
-            data-placement="top" href="javascript:void(0);" data-title="update" data-id="'.$val['id'].'" class="update-order btn btn-danger btn-sm" data-modal="#kt_table_1" data-key="'.$key.'" data-action="'.route('admin.orders.update',$val['id']).'">Confirm</a></div>'; /**/
+            data-placement="top" href="javascript:void(0);" data-title="update" data-id="'.$val['id'].'" class="update-order btn btn-success btn-sm" data-modal="#kt_table_1" data-key="'.$key.'" data-action="'.route('admin.orders.update',$val['id']).'">Confirm</a>
+            <a data-toggle="confirmation"
+            data-placement="top" href="javascript:void(0);" data-title="cancel" data-id="'.$val['id'].'" class="cancel-order btn btn-success btn-sm" data-modal="#kt_table_1" data-key="'.$key.'" data-action="'.route('admin.orders.cancel',$val['id']).'">Cancel</a><div>'; /**/
             $action_paid = $val['payment_status'];
             $data[$key]['action'] = $val['payment_status'] == 'Paid' ?  $action_paid : $action;
             $return_data[$key] = $val;
@@ -74,6 +100,24 @@ class OrdersController extends Controller
         return response()->json($records);
     }
 
+    public function OrderDeailsById($id) {
+        $order_details = OrderDetails::where('orders_id', $id)->get();
+        foreach($order_details as $details){
+            $product_color = json_decode($details->selected_color);
+            $product_size = json_decode($details->selected_size);
+            $order_detail[] = array(
+                'brand' => $details->modals,
+                'Product name' => $details->product_name,
+                'size' => $product_size->name,
+                'Quantity' => $details->selected_quantity,
+                'color' => $product_color->name,
+                'product ID' => $details->product_id,
+            );
+        }
+        
+        return $order_detail;
+
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -156,6 +200,24 @@ class OrdersController extends Controller
         
     }
 
+    public function cancelOrder(Request $request, $id)
+    {
+        $orders = Orders::find($request->id);
+        $orders->payment_status = 'cancelled';
+        if($orders->save()){
+            return response()->json([
+                'success' => true,
+                'status' => 'cancel',
+                'message' => 'Order Successfully Cancelled'
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'status' => 'cancel',
+                'message' => 'Something went Wrong, Contact technical Support'
+            ]);
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -185,11 +247,24 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
+
     {
-        $orders = Orders::find($id);
-        $orders->payment_status = 1;
-        $orders->save();
+        $orders = Orders::find($request->id);
+        $orders->payment_status = 'paid';
+        if($orders->save()){
+            return response()->json([
+                'success' => true,
+                'status' => 'update',
+                'message' => 'Order Successfully Confirmed'
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'status' => 'update',
+                'message' => 'Something went Wrong, Contact technical Support'
+            ]);
+        }
 
     }
 

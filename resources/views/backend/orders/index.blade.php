@@ -2,6 +2,11 @@
 {{-- @include('backend.category.css') --}}
 @section('content')
     <div class="kt-portlet kt-portlet--mobile">
+         <div class="kt-portlet__body">
+            <div style="display:none" id="error_msg_order" class="kt-alert kt-alert--outline alert alert-success alert-dismissible error_msg_order" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                <span id="error_msg"></span>
+            </div>
         <div class="kt-portlet__head kt-portlet__head--lg">
             <div class="kt-portlet__head-label">
 										<span class="kt-portlet__head-icon">
@@ -22,7 +27,8 @@
                 </div>
             </div>
         </div>
-        <div class="kt-portlet__body">
+        
+        
             <!--begin: Search Form -->
             <form class="kt-form kt-form--fit kt-margin-b-20 search-table-form">
                 <div class="row kt-margin-b-20">
@@ -47,17 +53,17 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <button class="btn btn-primary btn-brand--icon" id="kt_search">
-													<span>
-														<i class="la la-search"></i>
-														<span>Search</span>
-													</span>
+                            <span>
+                                <i class="la la-search"></i>
+                                <span>Search</span>
+                            </span>
                         </button>
                         &nbsp;&nbsp;
                         <button class="btn btn-secondary btn-secondary--icon" id="kt_reset">
-													<span>
-														<i class="la la-close"></i>
-														<span>Reset</span>
-													</span>
+                            <span>
+                                <i class="la la-close"></i>
+                                <span>Reset</span>
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -68,10 +74,15 @@
                 <thead>
                 <tr>
                     <th>Date </th>
+                    <th>Order Details</th>
+                    <th>Shipping Details </th>
+                    <th>Disount </th>
+                    <th >customer Detail </th>
                     <th>Invoice # </th>
                     <th>Subtotal </th>
                     <th>Discount </th>
                     <th>Grand Total </th>
+                    <th>Payment Method</th>
                     <th>Payment Status</th>
                     <th class="no-sort">Action</th>
                 </tr>
@@ -79,10 +90,15 @@
                 <tfoot>
                 <tr>
                     <th>Date </th>
+                    <th>Order Details</th>
+                    <th>Shipping Details </th>
+                    <th>Disount </th>
+                    <th>customer Detail </th>
                     <th>Invoice # </th>
                     <th>Subtotal </th>
                     <th>Discount </th>
                     <th>Grand Total </th>
+                    <th>Payment Method</th>
                     <th>Payment Status</th>
                     <th class="no-sort">Action</th>
                 </tr>

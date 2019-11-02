@@ -13,6 +13,10 @@ class Orders extends Model
                             'shipping_discount', 'subtotal', 'grandtotal', 'merchants', 
                             'customer_id'];
 
+    public function getcustomer(){
+        return $this->belongsTo(User::class, 'customer_id', 'id');
+    }
+
     public function getOrderId(){
         
         $order_id = $this::orderby('created_at', 'desc')->first();

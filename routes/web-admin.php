@@ -155,6 +155,8 @@ Route::group(['middleware'=>['admin.auth'],'as'=>'admin.'], function ($api) {
     ]]);
 
     $api->post('orders/list-ajax',['as'=>'orders.list-ajax','uses'=>'OrdersController@listAjax']);
+    $api->put('orders/cancel/{id}',['as'=>'orders.cancel','uses'=>'OrdersController@cancelOrder']);
+    $api->put('orders/update/{id}',['as'=>'orders.update','uses'=>'OrdersController@update']);
     $api->resource('orders', 'OrdersController',['names' => [
         'index'=>'orders.index'
     ]]);

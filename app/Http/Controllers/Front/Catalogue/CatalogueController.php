@@ -166,6 +166,7 @@ class CatalogueController extends Controller
                         'price')
                 ->leftJoin('categories', 'categories.id', '=','products.category_id' )
                 ->leftJoin('product_tags', 'product_tags.product_id', '=','products.id' );
+                // ->leftJoin('product_attribute_value pav', 'pav.product_id', '=', 'products.id');
                 // dd(!$sustainable, !isset($newarrivals));
         // if(!$sustainable && !isset($newarrivals)){
         //     $query->where('categories.parent_id', $category_id);
