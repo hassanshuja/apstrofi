@@ -16,10 +16,10 @@ class SnapController extends Controller
 
         // serverKey : 'VT-client-kev115vEOPOwkRiV',
         //       clientKey : 'VT-server-hYR70nG06FzM39QWP588bnS1'
-        Midtrans::$serverKey = 'VT-server-hYR70nG06FzM39QWP588bnS1';
+        Midtrans::$serverKey = 'VT-server-wUBr0PzaPAfqxchKI3HqnMQ8';
         
         //set is production to true for production mode
-        Midtrans::$isProduction = false;
+        Midtrans::$isProduction = true;
     }
 
     public function snap()

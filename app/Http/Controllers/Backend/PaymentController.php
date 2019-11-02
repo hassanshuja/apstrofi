@@ -38,10 +38,10 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $data = array('data' => $request->all());
-        Mail::send('emails.template.confirm-booking', $data , function($message) {
-            $message->to('clientsoftech@gmail.com', 'Tutorials Point')->subject
-               ('Laravel Basic Testing Mail');
-            $message->from('hassaan@clientsoftech.com','Virat Gandhi');
+        Mail::send('emails.template.confirm-booking', $data , function($message, $request) {
+            $message->to($request->email, 'Apstrofi')->subject
+               ('ORDER DETAILS');
+            $message->from('info@apstrofi.com','Apstrofi');
          });
 
         //  $order_id = $request->order_id;
