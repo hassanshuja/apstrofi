@@ -14,12 +14,14 @@ class SnapController extends Controller
     public function __construct()
     {   
 
-        // serverKey : 'VT-client-kev115vEOPOwkRiV',
-        //       clientKey : 'VT-server-hYR70nG06FzM39QWP588bnS1'
-        Midtrans::$serverKey = 'VT-server-wUBr0PzaPAfqxchKI3HqnMQ8';
+        //production key
+        // Midtrans::$serverKey = 'VT-server-wUBr0PzaPAfqxchKI3HqnMQ8';
+
+        //test key
+        Midtrans::$serverKey = 'VT-server-hYR70nG06FzM39QWP588bnS1';
         
         //set is production to true for production mode
-        Midtrans::$isProduction = true;
+        Midtrans::$isProduction = false;
     }
 
     public function snap()
